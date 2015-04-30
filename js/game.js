@@ -125,42 +125,23 @@ canvas.height = 480;
 document.body.appendChild(canvas);
 
 // Background image
-var bgReady = false;
 var bgImage = new Image();
-
-bgImage.onload = function () {
-	bgReady = true;
-};
-
 bgImage.src = "images/background2.png";
 
 // Hero
 var hero = {};
-var heroReady = false;
 var heroImage = new Image();
-
-heroImage.onload = function() {
-	heroReady = true;
-};
-
 heroImage.src = "images/hero_front.png";
 
 
 // Monster
 var monster = {};
-var monsterReady = false;
 var monsterImage = new Image();
-
-monsterImage.onload = function () {
-	monsterReady = true;
-};
-
 monsterImage.src = "images/monster_front.png";
 
 // Firebolt
 var firebolts = []
 var firebolt = {};
-var fireboltReady = false;
 var fireboltImage = new Image();
 
 fireboltImage.src = "images/crystal.png";
@@ -195,15 +176,15 @@ var update = function (keyCode) {
 
 // Draw everything
 var render = function () {
-	if (bgReady) {
+	if (bgImage.complete) {
 		ctx.drawImage(bgImage, 0, 0);
 	}
 
-	if (heroReady) {
+	if (heroImage.complete) {
 		ctx.drawImage(heroImage, hero.x, hero.y);
 	}
 
-	if (monsterReady) {
+	if (monsterImage.complete) {
 		ctx.drawImage(monsterImage, monster.x, monster.y);
 	}
 
