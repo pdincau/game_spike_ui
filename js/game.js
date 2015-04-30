@@ -3,23 +3,21 @@ var websocket;
 $(document).ready(init);
 
 function init() {
-  $('#server').val("ws://" + window.location.host + "/websocket");
-
   if(!("WebSocket" in window)) {
     console.log("websockets are not supported");
   } else {
-      console.log("websockets are supported");
-      connect();
+    console.log("websockets are supported");
+    connect();
   };
 };
 
 function connect() {
-  wsHost = "ws://127.0.0.1:8080/ws"
+  var wsHost = "ws://127.0.0.1:8080/ws"
   websocket = new WebSocket(wsHost);
-  websocket.onopen = function(evt) { onOpen(evt) };
-  websocket.onclose = function(evt) { onClose(evt) };
-  websocket.onmessage = function(evt) { onMessage(evt) };
-  websocket.onerror = function(evt) { onError(evt) };
+  websocket.onopen = onWebSocketOpen;
+  websocket.onclose = onWebSocketClose;
+  websocket.onmessage = onWebSocketMessage;
+  websocket.onerror = onWebSocketError;
 };
 
 function disconnect() {
@@ -42,29 +40,29 @@ function sendCommand(command) {
   };
 };
 
-function onOpen(evt) {
+function onWebSocketOpen(evt) {
   console.log("onopen")
   sendCommand("start");
 };
 
-function onClose(evt) {
+function onWebSocketClose(evt) {
   console.log("onclose")
 };
 
-function onMessage(evt) {
-  command = JSON.parse(event.data);
+function onWebSocketMessage(evt) {
+  var command = JSON.parse(evt.data);
   if (command.player) {
-    var position = JSON.parse(event.data).player.position;
+    var position = JSON.parse(evt.data).player.position;
     movePlayer(position);
   }
 
   if (command.monster) {
-  	var position = JSON.parse(event.data).monster.position;
+  	var position = JSON.parse(evt.data).monster.position;
     moveMonster(position);
   }
 
   if (command.firebolt) {
-    var position = JSON.parse(event.data).firebolt.position;
+    var position = JSON.parse(evt.data).firebolt.position;
     moveFirebolt(position);
   }
 };
@@ -115,7 +113,7 @@ function moveFirebolt(position) {
   firebolt.ready = true;
 };
 
-function onError(evt) {
+function onWebSocketError(evt) {
  console.log("onopen")
 };
 
@@ -127,42 +125,23 @@ canvas.height = 480;
 document.body.appendChild(canvas);
 
 // Background image
-var bgReady = false;
 var bgImage = new Image();
-
-bgImage.onload = function () {
-	bgReady = true;
-};
-
 bgImage.src = "images/background2.png";
 
 // Hero
 var hero = {};
-var heroReady = false;
 var heroImage = new Image();
-
-heroImage.onload = function() {
-	heroReady = true;
-};
-
 heroImage.src = "images/hero_front.png";
 
 
 // Monster
 var monster = {};
-var monsterReady = false;
 var monsterImage = new Image();
-
-monsterImage.onload = function () {
-	monsterReady = true;
-};
-
 monsterImage.src = "images/monster_front.png";
 
 // Firebolt
 var firebolts = []
 var firebolt = {};
-var fireboltReady = false;
 var fireboltImage = new Image();
 
 fireboltImage.src = "images/crystal.png";
@@ -172,43 +151,44 @@ addEventListener("keypress", function (e) { update(e.keyCode); });
 
 // Update game objects
 var update = function (keyCode) {
+  var msg = {};
 	if (keyCode == 119) {
-		var msg = {move: "down"};
-		sendCommand(JSON.stringify(msg));
-	}
+    msg.move = "down";
+  }
 
-	if (keyCode == 115) {
-		var msg = {move: "up"};
-		sendCommand(JSON.stringify(msg));
-	}
+  if (keyCode == 115) {
+    msg.move = "up";
+  }
 
-	if (keyCode == 97) {
-		var msg = {move: "left"};
-		sendCommand(JSON.stringify(msg));
-	}
+  if (keyCode == 97) {
+    msg.move = "left";
+  }
 
-	if (keyCode == 100) {
-		var msg = {move: "right"};
-		sendCommand(JSON.stringify(msg));
-	}
+  if (keyCode == 100) {
+    msg.move = "right";
+  }
 
   if (keyCode == 106) {
-    var msg = {attack: "fire"};
+		msg.attack = "fire";
+  }
+
+
+  if( msg.move || msg.attack ){
     sendCommand(JSON.stringify(msg));
   }
 };
 
 // Draw everything
 var render = function () {
-	if (bgReady) {
+	if (bgImage.complete) {
 		ctx.drawImage(bgImage, 0, 0);
 	}
 
-	if (heroReady) {
+	if (heroImage.complete) {
 		ctx.drawImage(heroImage, hero.x, hero.y);
 	}
 
-	if (monsterReady) {
+	if (monsterImage.complete) {
 		ctx.drawImage(monsterImage, monster.x, monster.y);
 	}
 
