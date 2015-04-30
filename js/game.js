@@ -72,6 +72,7 @@ function onMessage(evt) {
 function movePlayer(position) {
   hero.x = position.x * 16;
   hero.y = position.y * 16;
+
   if (position.direction == "n") {
     heroImage.src = "images/hero_front.png";
   }
@@ -89,13 +90,24 @@ function movePlayer(position) {
   }
 };
 
+var monsterStep = 0;
+
 function moveMonster(position) {
   monster.x = position.x * 16;
   monster.y = position.y * 16;
+  monsterStep = monsterStep + 1;
   if (position.direction == "n") {
-    monsterImage.src = "images/monster_front.png";
+    if (monsterStep % 2 == 0) {
+      monsterImage.src = "images/monster_front.png";
+    } else {
+      monsterImage.src = "images/monster_front1.png";
+    }
   } else {
-    monsterImage.src = "images/monster_back.png";
+    if (monsterStep % 2 == 0) {
+      monsterImage.src = "images/monster_back.png";
+    } else {
+      monsterImage.src = "images/monster_back1.png";
+    }
   }
 };
 
