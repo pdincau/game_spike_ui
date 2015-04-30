@@ -90,25 +90,22 @@ function movePlayer(position) {
   }
 };
 
-var monsterStep = 0;
+var step = 0;
 
 function moveMonster(position) {
   monster.x = position.x * 16;
   monster.y = position.y * 16;
-  monsterStep = monsterStep + 1;
+  step = step + 1;
   if (position.direction == "n") {
-    if (monsterStep % 2 == 0) {
-      monsterImage.src = "images/monster_front.png";
-    } else {
-      monsterImage.src = "images/monster_front1.png";
-    }
+    monsterImage.src = "images/monster_front";
   } else {
-    if (monsterStep % 2 == 0) {
-      monsterImage.src = "images/monster_back.png";
-    } else {
-      monsterImage.src = "images/monster_back1.png";
-    }
+    monsterImage.src = "images/monster_back";
   }
+
+  if (step % 2 == 0) {
+    monsterImage.src += "1";
+  }
+  monsterImage.src += ".png";
 };
 
 function moveFirebolt(position) {
