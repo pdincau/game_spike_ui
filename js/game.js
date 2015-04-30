@@ -171,7 +171,11 @@ var update = function (keyCode) {
   if (keyCode == 106) {
 		msg.move = "fire";
   }
-  sendCommand(JSON.stringify(msg));
+
+
+  if( msg.move ){
+    sendCommand(JSON.stringify(msg));
+  }
 };
 
 // Draw everything
