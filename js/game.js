@@ -3,23 +3,21 @@ var websocket;
 $(document).ready(init);
 
 function init() {
-  $('#server').val("ws://" + window.location.host + "/websocket");
-
   if(!("WebSocket" in window)) {
     console.log("websockets are not supported");
   } else {
-      console.log("websockets are supported");
-      connect();
+    console.log("websockets are supported");
+    connect();
   };
 };
 
 function connect() {
-  wsHost = "ws://127.0.0.1:8080/ws"
+  var wsHost = "ws://127.0.0.1:8080/ws"
   websocket = new WebSocket(wsHost);
-  websocket.onopen = function(evt) { onOpen(evt) };
-  websocket.onclose = function(evt) { onClose(evt) };
-  websocket.onmessage = function(evt) { onMessage(evt) };
-  websocket.onerror = function(evt) { onError(evt) };
+  websocket.onopen = onOpen;
+  websocket.onclose = onClose;
+  websocket.onmessage = onMessage;
+  websocket.onerror = onError;
 };
 
 function disconnect() {
@@ -52,7 +50,7 @@ function onClose(evt) {
 };
 
 function onMessage(evt) {
-  command = JSON.parse(event.data);
+  var command = JSON.parse(event.data);
   if (command.player) {
     var position = JSON.parse(event.data).player.position;
     movePlayer(position);
@@ -172,30 +170,27 @@ addEventListener("keypress", function (e) { update(e.keyCode); });
 
 // Update game objects
 var update = function (keyCode) {
+  var msg = {};
 	if (keyCode == 119) {
-		var msg = {move: "down"};
-		sendCommand(JSON.stringify(msg));
-	}
+    msg.move = "down";
+  }
 
-	if (keyCode == 115) {
-		var msg = {move: "up"};
-		sendCommand(JSON.stringify(msg));
-	}
+  if (keyCode == 115) {
+    msg.move = "up";
+  }
 
-	if (keyCode == 97) {
-		var msg = {move: "left"};
-		sendCommand(JSON.stringify(msg));
-	}
+  if (keyCode == 97) {
+    msg.move = "left";
+  }
 
-	if (keyCode == 100) {
-		var msg = {move: "right"};
-		sendCommand(JSON.stringify(msg));
-	}
+  if (keyCode == 100) {
+    msg.move = "right";
+  }
 
   if (keyCode == 106) {
-    var msg = {attack: "fire"};
-    sendCommand(JSON.stringify(msg));
+		msg.move = "fire";
   }
+  sendCommand(JSON.stringify(msg));
 };
 
 // Draw everything
