@@ -169,11 +169,11 @@ var update = function (keyCode) {
   }
 
   if (keyCode == 106) {
-		msg.move = "fire";
+		msg.attack = "fire";
   }
 
 
-  if( msg.move ){
+  if( msg.move || msg.attack ){
     sendCommand(JSON.stringify(msg));
   }
 };
