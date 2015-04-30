@@ -14,10 +14,10 @@ function init() {
 function connect() {
   var wsHost = "ws://127.0.0.1:8080/ws"
   websocket = new WebSocket(wsHost);
-  websocket.onopen = onOpen;
-  websocket.onclose = onClose;
-  websocket.onmessage = onMessage;
-  websocket.onerror = onError;
+  websocket.onopen = onWebSocketOpen;
+  websocket.onclose = onWebSocketClose;
+  websocket.onmessage = onWebSocketMessage;
+  websocket.onerror = onWebSocketError;
 };
 
 function disconnect() {
@@ -40,16 +40,16 @@ function sendCommand(command) {
   };
 };
 
-function onOpen(evt) {
+function onWebSocketOpen(evt) {
   console.log("onopen")
   sendCommand("start");
 };
 
-function onClose(evt) {
+function onWebSocketClose(evt) {
   console.log("onclose")
 };
 
-function onMessage(evt) {
+function onWebSocketMessage(evt) {
   var command = JSON.parse(evt.data);
   if (command.player) {
     var position = JSON.parse(evt.data).player.position;
@@ -113,7 +113,7 @@ function moveFirebolt(position) {
   firebolt.ready = true;
 };
 
-function onError(evt) {
+function onWebSocketError(evt) {
  console.log("onopen")
 };
 
