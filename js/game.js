@@ -50,19 +50,19 @@ function onClose(evt) {
 };
 
 function onMessage(evt) {
-  var command = JSON.parse(event.data);
+  var command = JSON.parse(evt.data);
   if (command.player) {
-    var position = JSON.parse(event.data).player.position;
+    var position = JSON.parse(evt.data).player.position;
     movePlayer(position);
   }
 
   if (command.monster) {
-  	var position = JSON.parse(event.data).monster.position;
+  	var position = JSON.parse(evt.data).monster.position;
     moveMonster(position);
   }
 
   if (command.firebolt) {
-    var position = JSON.parse(event.data).firebolt.position;
+    var position = JSON.parse(evt.data).firebolt.position;
     moveFirebolt(position);
   }
 };
